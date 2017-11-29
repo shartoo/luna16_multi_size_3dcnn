@@ -17,6 +17,8 @@ The detail about the paper can be found [luna16 3DCNN](http://shartoo.github.io/
 
 + matplotlib
 
++ Tensorflow >1.3
+
 ## 1 process step
 
 First run `data_prepare.py` to extract cubic from raw CT files.
