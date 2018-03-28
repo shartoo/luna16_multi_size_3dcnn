@@ -21,8 +21,14 @@ The detail about the paper can be found [luna16 3DCNN](http://shartoo.github.io/
 
 ## 1 process step
 
-First run `data_prepare.py` to extract cubic from raw CT files.
+First run `data_prepare.py` to extract cubic(both real nodule and fake ones) from raw CT files. This may take hours and the output of this step is
 
-Then run `main.py` to train model,inference step will be ran as follow.
++ cubic_npy
++ cubic_normalization_npy
++ cubic_normalization_test
+
+the total size of those file is around  100GB,please leave enough disk.
+
+Then run `main.py` to train model,inference step will be ran as follow,this step is rather slow cause of huge number of data.
 
 
