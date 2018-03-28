@@ -8,7 +8,7 @@ import tensorflow as tf
 from data_prepare import get_train_batch,get_all_filename,get_test_batch
 import random
 import time
-import tensorflow.python.debug as tf_debug
+#import tensorflow.python.debug as tf_debug
 class model(object):
 
     def __init__(self,learning_rate,keep_prob,batch_size,epoch):
@@ -78,7 +78,7 @@ class model(object):
 
         all_filenames = get_all_filename(npy_path,self.cubic_shape[model_index][1])
         # how many time should one epoch should loop to feed all data
-        times = len(all_filenames) / self.batch_size
+        times = int(len(all_filenames) / self.batch_size)
         if (len(all_filenames) % self.batch_size) != 0:
             times = times + 1
 
@@ -94,7 +94,7 @@ class model(object):
         if train_flag:
             # softmax layer
             real_label = tf.placeholder(tf.float32, [None, 2])
-            cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(net_out, real_label))
+            cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=net_out, labels=real_label))
             #cross_entropy = -tf.reduce_sum(real_label * tf.log(net_out))
             net_loss = tf.reduce_mean(cross_entropy)
 

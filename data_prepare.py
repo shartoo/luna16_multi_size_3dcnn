@@ -15,6 +15,9 @@ import traceback
 import random
 from PIL import Image
 
+
+from project_config import *
+
 def get_filename(file_list, case):
     for f in file_list:
         if case in f:
@@ -35,7 +38,8 @@ def extract_real_cubic_from_mhd(dcim_path,annatation_file,plot_output_path,norma
 
     for img_file in file_list:
         mini_df = df_node[df_node["file"]==img_file] #get all nodules associate with file
-        file_name = str(img_file).split("/")[-1]
+        #file_name = str(img_file).split("/")[-1]
+        file_name = os.path.basename(img_file)
         if mini_df.shape[0]>0: # some files may not have a nodule--skipping those
             # load the data once
             itk_img = sitk.ReadImage(img_file)
@@ -80,7 +84,7 @@ def extract_real_cubic_from_mhd(dcim_path,annatation_file,plot_output_path,norma
                     np.save(os.path.join(normalization_output_path, "%d_real_size40x40.npy" % node_idx),imgs3)
                     #print("normalization finished!..." )
 
-                except Exception,e:
+                except Exception as e:
                     print(" process images %s error..."%str(file_name))
                     print(Exception,":",e)
                     traceback.print_exc()
@@ -101,7 +105,8 @@ def extract_fake_cubic_from_mhd(dcim_path,annatation_file,plot_output_path,norma
 
     for img_file in file_list:
         mini_df = df_node[df_node["file"]==img_file] #get all nodules associate with file
-        file_name = str(img_file).split("/")[-1]
+        #file_name = str(img_file).split("/")[-1]
+        file_name = os.path.basename(img_file)
         num = 0
         if mini_df.shape[0]>0 and num<10000: # some files may not have a nodule--skipping those
             # load the data once
@@ -160,7 +165,7 @@ def extract_fake_cubic_from_mhd(dcim_path,annatation_file,plot_output_path,norma
                     num = num+1
 
                     #print(" extract fake cubic finished...")
-                except Exception, e:
+                except Exception as e:
                     print(" process images %s error..." % str(file_name))
                     print(Exception, ":", e)
                     traceback.print_exc()
@@ -268,7 +273,7 @@ def get_test_batch(path):
                     batch_label.append([0, 1])
                 elif 'fake_' in npy.split("/")[-1]:
                     batch_label.append([1, 0])
-        except Exception, e:
+        except Exception as e:
             print("file not exists! %s" % npy)
             batch_array.append(batch_array[-1])  # some nodule process error leading nonexistent of the file, using the last file copy to fill
             print(e.message)
@@ -293,7 +298,7 @@ def get_train_batch(batch_filename):
                 batch_label.append([0,1])
             elif 'fake_' in npy.split("/")[-1]:
                 batch_label.append([1, 0])
-        except Exception,e:
+        except Exception  as e:
             print("file not exists! %s"%npy)
             batch_array.append(batch_array[-1])  # some nodule process error leading nonexistent of the file, using the last file copy to fill
 
@@ -321,20 +326,19 @@ def angle_transpose(file,degree,flag_string):
 
 if __name__ =='__main__':
 
-    annatation_file = '/data/LUNA2016/lung_imgs/evaluationScript/annotations/annotations.csv'
-    candidate_file = '/data/LUNA2016/lung_imgs/candidates_V2.csv'
-    plot_output_path = '/data/LUNA2016/cubic_npy'
-    normalazation_output_path = '/data/LUNA2016/cubic_normalization_npy'
-    test_path = '/data/LUNA2016/cubic_normalization_test/'
-    for i in range(1,9):
-        dcim_path = '/data/LUNA2016/lung_imgs/subset'+str(i)+"/"
+    for i in range(0,9):
+        dcim_path = base_dir +'subset'+str(i)+"/"
         extract_real_cubic_from_mhd(dcim_path, annatation_file, plot_output_path,normalazation_output_path)
-        #extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path,normalazation_output_path)
+        extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path, normalazation_output_path)
+
+    for i in range(9,10):
+        dcim_path = base_dir +'subset'+str(i)+"/"
+        extract_real_cubic_from_mhd(dcim_path, annatation_file, plot_output_path,test_path)
+        extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path,test_path)
         print("  #######  extract cubic from subset%d finished    #######"%i)
     print("finished!...")
     #list = search(normalazation_output_path,'real_size10x10')
     print(list)
-
     #plot_cubic(
     #    '/data/LUNA2016/cubic_npy/images_1.3.6.1.4.1.14519.5.2.1.6279.6001.868211851413924881662621747734.mhd_1123_pos-79.93305233_81.93715229_-169.4337204_size10x10.npy')
 
