@@ -19,7 +19,13 @@ The detail about the paper can be found [luna16 3DCNN](http://shartoo.github.io/
 
 + Tensorflow >1.3
 
-## 1 process step
+## 1 data
+
+You can download LUNA16 dataset from [BaiduCloudDisk](https://pan.baidu.com/s/1iG200fldJEG-fnTnqs5F-w),there are laso some torrent file to download with other tools.
+
+
+
+## 2 process step
 
 First run `data_prepare.py` to extract cubic(both real nodule and fake ones) from raw CT files. This may take hours and the output of this step is
 
@@ -27,7 +33,7 @@ First run `data_prepare.py` to extract cubic(both real nodule and fake ones) fro
 + cubic_normalization_npy
 + cubic_normalization_test
 
-the total size of those file is around  100GB,please leave enough disk.
+the total size of those file is around  100GB and take one night in my PC(16GB RAM,i5),please leave enough disk.
 
 Then run `main.py` to train model,inference step will be ran as follow,this step is rather slow cause of huge number of data.
 
