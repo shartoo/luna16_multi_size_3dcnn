@@ -65,7 +65,7 @@ class model(object):
 
             w_sm = tf.Variable(tf.random_normal([2, 2], stddev=0.001), name='w_sm')
             b_sm = tf.constant(0.001, shape=[2])
-            out_sm = tf.nn.softmax(tf.add(tf.matmul(out_fc2, w_sm), b_sm))
+            out_sm = tf.add(tf.matmul(out_fc2, w_sm), b_sm)
 
             return out_sm
 
