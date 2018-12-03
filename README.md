@@ -46,7 +46,7 @@ medical format(sth like CT) to images.There is no need to worry about positive/n
 |1.3.6.1.4.1.14519.5.2.1.6279.6001.100398138793540579077826395208|69.63901724|-140.9445859|876.3744957|5.786347814|
 |1.3.6.1.4.1.14519.5.2.1.6279.6001.100621383016233746780170740405|-24.0138242|192.1024053|-391.0812764|8.143261683|
 
-unit of `coordX`,`coordY`,`coordZ`,`diameter_mm` are **mm**
+unit of `coordX`,`coordY`,`coordZ`,`diameter_mm` are **mm** and there are 1187 lines in this csv file.
  
  
  **candidates.csv**
@@ -58,11 +58,30 @@ unit of `coordX`,`coordY`,`coordZ`,`diameter_mm` are **mm**
 |1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860|-24.76675476|-120.3792939|-273.3615387|0|
 |1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860|-63.08|-65.74|-344.24|0|
 
-Value of class column means postive(1) or negative(0).
+Value of class column means postive(1) or negative(0). There are 754976 lines in this csv file.
+
+The positive/negative sample ratio is 1187 vs 754976 ,nearly 1:636. Data enhancement is essential.
 
 ### 1.2 how to prepare data
 
+We have center coordinates and diameter of every true positive nodule and huge number of false positive candidates(center coodinates without diameter),it's rather clear what we need to do,just extracting them
+out with multiscale method. 
 
+The [paper](https://shartoo.github.io/LUNA2016-3DCNN/) imply that scale below are appropriate
+
++ $20\times 20\times 6$
++ $30\times 30\times 10$
++ $40\times 40\times 26$
+
+As positive are annotated with diameters while negative not,we are using a simple and rude method to extract cubes on every nodule(both for real and fake ones).
+
+There is a better way preparing positive sample .An idea borrowed from objection and location  such as SSD or FasterRCNN is bounding box generation.We can generate
+ cubes sliding whole 3D CT space and keep cubes whose IOU are greater than a threshold like 0.7 in FasterRCNN as positive samples .
+
+### 1.3 Data enhancement
+
++ image flip: currently only a image flip with 90,180,270 degree was done for positive samples according to the paper.
++ data normalization: all radiation density are truncated in range -1000 to 400 and normalized into 0 to 1.
 
 ## 2 process step
 
