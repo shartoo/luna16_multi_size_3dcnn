@@ -76,7 +76,8 @@ The [paper](https://shartoo.github.io/LUNA2016-3DCNN/) imply that scale below ar
 As positive are annotated with diameters while negative not,we are using a simple and rude method to extract cubes on every nodule(both for real and fake ones).
 
 There is a better way preparing positive sample .An idea borrowed from objection and location  such as SSD or FasterRCNN is bounding box generation.We can generate
- cubes sliding whole 3D CT space and keep cubes whose IOU are greater than a threshold like 0.7 in FasterRCNN as positive samples .
+ cubes sliding whole 3D CT space and keep cubes whose IOU are greater than a threshold like 0.7 in FasterRCNN as positive samples . This idea comes from a teacher from 
+ Shanghai Jiaotong University.I'll implement soon.
 
 ### 1.3 Data enhancement
 
