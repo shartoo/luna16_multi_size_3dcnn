@@ -32,7 +32,7 @@ class model(object):
             # max pooling ,pooling layer has no effect on the data size
             hidden_conv1 = tf.nn.max_pool3d(out_conv1,strides=[1,1,1,1,1],ksize=[1,1,1,1,1],padding='SAME')
 
-            # after conv1 ,the output size is batch_sizex4x16x16x64([batch_size,in_deep,width,height,output_deep])
+            # after conv1 ,the output size is batch_size x x20x20x64 ([batch_size,in_deep,width,height,output_deep])
             w_conv2 = tf.Variable(tf.random_normal([3,5, 5, 64,64], stddev=0.001), dtype=tf.float32,name='w_conv2')
             b_conv2 = tf.Variable(tf.constant(0.01, shape=[64]), dtype=tf.float32, name='b_conv2')
             out_conv2 = tf.nn.relu(tf.add(tf.nn.conv3d(hidden_conv1, w_conv2, strides=[1, 1, 1,1, 1], padding='VALID'), b_conv2))
@@ -66,7 +66,56 @@ class model(object):
             w_sm = tf.Variable(tf.random_normal([2, 2], stddev=0.001), name='w_sm')
             b_sm = tf.constant(0.001, shape=[2])
             out_sm = tf.add(tf.matmul(out_fc2, w_sm), b_sm)
+            return out_sm
 
+    def archi_2(self, input, keep_prob):
+        with tf.name_scope("Archi-2"):
+            # input size is batch_sizex20x20x6
+            # 5x5x3 is the kernel size of conv1,1 is the input depth,64 is the number output channel
+            w_conv1 = tf.Variable(tf.random_normal([3, 5, 5, 1, 64], stddev=0.001), dtype=tf.float32, name='w_conv1')
+            b_conv1 = tf.Variable(tf.constant(0.01, shape=[64]), dtype=tf.float32, name='b_conv1')
+            out_conv1 = tf.nn.relu(
+                tf.add(tf.nn.conv3d(input, w_conv1, strides=[1, 1, 1, 1, 1], padding='VALID'), b_conv1))
+            out_conv1 = tf.nn.dropout(out_conv1, keep_prob)
+
+            # max pooling ,pooling layer has no effect on the data size
+            hidden_conv1 = tf.nn.max_pool3d(out_conv1, strides=[1, 2, 2, 1, 1], ksize=[1, 1, 1, 1, 1], padding='SAME')
+
+            # after conv1 ,the output size is batch_sizex4x16x16x64([batch_size,in_deep,width,height,output_deep])
+            w_conv2 = tf.Variable(tf.random_normal([3, 5, 5, 64, 64], stddev=0.001), dtype=tf.float32, name='w_conv2')
+            b_conv2 = tf.Variable(tf.constant(0.01, shape=[64]), dtype=tf.float32, name='b_conv2')
+            out_conv2 = tf.nn.relu(
+                tf.add(tf.nn.conv3d(hidden_conv1, w_conv2, strides=[1, 1, 1, 1, 1], padding='VALID'), b_conv2))
+            out_conv2 = tf.nn.dropout(out_conv2, keep_prob)
+
+            # after conv2 ,the output size is batch_sizex2x12x12x64([batch_size,in_deep,width,height,output_deep])
+            w_conv3 = tf.Variable(tf.random_normal([3, 5, 5, 64, 64], stddev=0.001), dtype=tf.float32,
+                                  name='w_conv3')
+            b_conv3 = tf.Variable(tf.constant(0.01, shape=[64]), dtype=tf.float32, name='b_conv3')
+            out_conv3 = tf.nn.relu(
+                tf.add(tf.nn.conv3d(out_conv2, w_conv3, strides=[1, 1, 1, 1, 1], padding='VALID'), b_conv3))
+            out_conv3 = tf.nn.dropout(out_conv3, keep_prob)
+
+            out_conv3_shape = tf.shape(out_conv3)
+            tf.summary.scalar('out_conv3_shape', out_conv3_shape[0])
+
+            # after conv2 ,the output size is batch_sizex2x8x8x64([batch_size,in_deep,width,height,output_deep])
+            # all feature map flatten to one dimension vector,this vector will be much long
+            out_conv3 = tf.reshape(out_conv3, [-1, 64 * 8 * 8 * 2])
+            w_fc1 = tf.Variable(tf.random_normal([64 * 8 * 8 * 2, 250], stddev=0.001), name='w_fc1')
+            out_fc1 = tf.nn.relu(tf.add(tf.matmul(out_conv3, w_fc1), tf.constant(0.001, shape=[250])))
+            out_fc1 = tf.nn.dropout(out_fc1, keep_prob)
+
+            out_fc1_shape = tf.shape(out_fc1)
+            tf.summary.scalar('out_fc1_shape', out_fc1_shape[0])
+
+            w_fc2 = tf.Variable(tf.random_normal([150, 2], stddev=0.001), name='w_fc2')
+            out_fc2 = tf.nn.relu(tf.add(tf.matmul(out_fc1, w_fc2), tf.constant(0.001, shape=[2])))
+            out_fc2 = tf.nn.dropout(out_fc2, keep_prob)
+
+            w_sm = tf.Variable(tf.random_normal([2, 2], stddev=0.001), name='w_sm')
+            b_sm = tf.constant(0.001, shape=[2])
+            out_sm = tf.add(tf.matmul(out_fc2, w_sm), b_sm)
             return out_sm
 
 
@@ -77,6 +126,7 @@ class model(object):
         highest_iterator = 1
 
         all_filenames = get_all_filename(npy_path,self.cubic_shape[model_index][1])
+        print("file size is :\t",len(all_filenames))
         # how many time should one epoch should loop to feed all data
         times = int(len(all_filenames) / self.batch_size)
         if (len(all_filenames) % self.batch_size) != 0:
@@ -126,6 +176,8 @@ class model(object):
 
                     epoch_end = time.time()
                     test_batch,test_label = get_test_batch(test_path)
+                    print("test batch data:\t",test_batch)
+                    print("test batch label:\t", test_label)
                     test_dict = {x: test_batch, real_label: test_label, keep_prob:self.keep_prob}
                     acc_test,loss = sess.run([accruacy,net_loss],feed_dict=test_dict)
                     print('accuracy  is %f' % acc_test)
@@ -133,31 +185,3 @@ class model(object):
                     print(" epoch %d time consumed %f seconds"%(i,(epoch_end-epoch_start)))
 
             print("training finshed..highest accuracy is %f,the iterator is %d " % (highest_acc, highest_iterator))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

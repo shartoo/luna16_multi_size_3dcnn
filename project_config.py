@@ -1,6 +1,6 @@
 import os
 
-base_dir =  "G:/data/luna2016/"
+base_dir =  "H:/data/luna2016/"
 annatation_file = base_dir + 'CSVFILES/annotations.csv'
 candidate_file =base_dir +  'CSVFILES/candidates_V2.csv'
 plot_output_path = base_dir + 'cubic_npy'
