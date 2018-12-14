@@ -326,14 +326,16 @@ def angle_transpose(file,degree,flag_string):
 
 if __name__ =='__main__':
 
-    for i in range(0,9):
-        if i!=2:
-            dcim_path = base_dir +'subset'+str(i)+"/"
-            extract_real_cubic_from_mhd(dcim_path, annatation_file, plot_output_path,normalazation_output_path)
-            extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path, normalazation_output_path)
+    # for i in range(0,9):
+    #     if i!=2:
+    #         dcim_path = base_dir +'subset'+str(i)+"/"
+    #         print("extracting image into %s"%normalazation_output_path)
+    #         extract_real_cubic_from_mhd(dcim_path, annatation_file, plot_output_path,normalazation_output_path)
+    #         extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path, normalazation_output_path)
 
     for i in range(9,10):
         dcim_path = base_dir +'subset'+str(i)+"/"
+        print("extracting image into %s (test path)"%test_path)
         extract_real_cubic_from_mhd(dcim_path, annatation_file, plot_output_path,test_path)
         extract_fake_cubic_from_mhd(dcim_path, candidate_file, plot_output_path,test_path)
         print("  #######  extract cubic from subset%d finished    #######"%i)
