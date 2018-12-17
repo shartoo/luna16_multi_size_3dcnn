@@ -21,11 +21,11 @@ sess2 = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options2))
 gpu_options3 = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)
 sess3 = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options3))
 
-def weight_variable(name,shape):
-    return tf.get_variable(name,shape,DTYPE,tf.truncated_normal_initializer(stddev=0.001))
+def weight_variable(shape,name=None):
+    return tf.get_variable(name=name,shape=shape,initializer=tf.truncated_normal_initializer(stddev=0.001))
 
-def bias_variable(name,shape):
-    return tf.get_variable(name,shape,DTYPE,tf.constant(0.1,dtype=DTYPE))
+def bias_variable(shape,name=None):
+    return tf.get_variable(name=name,shape=shape,initializer=tf.constant_initializer(value=0.01))
 
 def arch1(inputs,_keep_prob):
     '''
@@ -39,10 +39,10 @@ def arch1(inputs,_keep_prob):
         # shape of input for arch-1 is cube 20x20x6
         with tf.variable_scope("conv_1") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight",[3,5,5,in_filters,out_filters])
+            kernel = weight_variable([3,5,5,in_filters,out_filters],name="weight")
             # the output size is batch_size x 6x20x20x64 ([batch_size,in_deep,width,height,output_deep])
             conv = tf.nn.conv3d(pre_layer,kernel,strides=[1,1,1,1,1],padding='SAME')
-            bias = bias_variable("biases",[out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv,bias)
             conv1 = tf.nn.relu(bias,name=con_scope.name)
 
@@ -56,9 +56,9 @@ def arch1(inputs,_keep_prob):
 
         with tf.variable_scope("conv_2") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [3,5,5, in_filters, out_filters])
+            kernel = weight_variable([3,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable( [out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv2 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -68,9 +68,9 @@ def arch1(inputs,_keep_prob):
 
         with tf.variable_scope("conv_3") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [1,5,5, in_filters, out_filters])
+            kernel = weight_variable([1,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv3 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -100,10 +100,10 @@ def arch2(inputs,_keep_prob):
         # shape of input for arch-1 is cube 30x30x10
         with tf.variable_scope("conv_1") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight",[3,5,5,in_filters,out_filters])
+            kernel = weight_variable([3,5,5,in_filters,out_filters],name="weight")
             # the output size is batch_size x 6x20x20x64 ([batch_size,in_deep,width,height,output_deep])
             conv = tf.nn.conv3d(pre_layer,kernel,strides=[1,1,1,1,1],padding='SAME')
-            bias = bias_variable("biases",[out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv,bias)
             conv1 = tf.nn.relu(bias,name=con_scope.name)
 
@@ -117,9 +117,9 @@ def arch2(inputs,_keep_prob):
 
         with tf.variable_scope("conv_2") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [3,5,5, in_filters, out_filters])
+            kernel = weight_variable( [3,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv2 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -129,9 +129,9 @@ def arch2(inputs,_keep_prob):
 
         with tf.variable_scope("conv_3") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [3,5,5, in_filters, out_filters])
+            kernel = weight_variable([3,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv3 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -162,10 +162,10 @@ def arch3(inputs,_keep_prob):
         # shape of input for arch-1 is cube 40x40x26
         with tf.variable_scope("conv_1") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight",[3,5,5,in_filters,out_filters])
+            kernel = weight_variable([3,5,5,in_filters,out_filters],name="weight")
             # the output size is batch_size x 6x20x20x64 ([batch_size,in_deep,width,height,output_deep])
             conv = tf.nn.conv3d(pre_layer,kernel,strides=[1,1,1,1,1],padding='SAME')
-            bias = bias_variable("biases",[out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv,bias)
             conv1 = tf.nn.relu(bias,name=con_scope.name)
 
@@ -179,9 +179,9 @@ def arch3(inputs,_keep_prob):
 
         with tf.variable_scope("conv_2") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [3,5,5, in_filters, out_filters])
+            kernel = weight_variable([3,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv2 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -191,9 +191,9 @@ def arch3(inputs,_keep_prob):
 
         with tf.variable_scope("conv_3") as con_scope:
             out_filters = 64
-            kernel = weight_variable("weight", [3,5,5, in_filters, out_filters])
+            kernel = weight_variable([3,5,5, in_filters, out_filters],name="weight")
             conv = tf.nn.conv3d(pre_layer, kernel, strides=[1, 1, 1, 1, 1], padding='SAME')
-            bias = bias_variable("biases", [out_filters])
+            bias = bias_variable([out_filters],name="biases")
             bias = tf.nn.bias_add(conv, bias)
             conv3 = tf.nn.relu(bias, name=con_scope.name)
 
@@ -229,11 +229,11 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
         x = tf.placeholder(tf.float32, [None, cubic_shape[arch_index][0], cubic_shape[arch_index][1], cubic_shape[arch_index][2]])
         x_image = tf.reshape(x, [-1, cubic_shape[arch_index][0], cubic_shape[arch_index][1], cubic_shape[arch_index][2], 1])
         if arch_index == 1:
-            net = arch1(x_image)
+            net = arch1(x_image,keep_prob)
         elif arch_index == 2:
-            net = arch2(x_image)
+            net = arch2(x_image,keep_prob)
         elif arch_index == 3:
-            net = arch3(x_image)
+            net = arch3(x_image,keep_prob)
         else:
             print("model architecture index must be 1 or 2 or 3,current is %s which is not supported"%(str(arch_index)))
             return
@@ -246,7 +246,7 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
         train_step = tf.train.MomentumOptimizer(learning_rate, 0.9).minimize(net_loss)
         correct_prediction = tf.equal(tf.argmax(net, 1), tf.argmax(real_label, 1))
         accruacy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-        merged = tf.summary.merge_all()
+        #merged = tf.summary.merge_all()
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -259,10 +259,15 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
                 for t in range(times):
                     batch_files = all_filenames[t*batch_size:(t+1)*batch_size]
                     batch_data, batch_label = get_train_batch(batch_files)
+                    # print("training data ...")
+                    # print(batch_data)
+                    # print("training label...")
+                    # print(batch_label)
                     feed_dict = {x: batch_data, real_label: batch_label,keep_prob:0.8}
-                    _,summary = sess.run([train_step, merged],feed_dict =feed_dict)
+                    _,summary = sess.run([train_step],feed_dict =feed_dict)
                     train_writer.add_summary(summary, i)
                     saver.save(sess, './arch-%d-ckpt/arch-%d'%(arch_index,arch_index), global_step=i + 1)
+                    print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
 
                 epoch_end = time.time()
                 test_batch,test_label = get_test_batch(test_path)
@@ -276,3 +281,8 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
 
             print("training finshed..highest accuracy is %f,the iterator is %d " % (highest_acc, highest_iterator))
 
+
+arch_index = 1
+npy_path = "H:/data/luna2016/cubic_normalization_npy/"
+test_path = "H:/data/luna2016/cubic_normalization_test/"
+train_model(arch_index,npy_path,test_path,batch_size = 32)
