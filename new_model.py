@@ -6,7 +6,7 @@ import random
 
 DTYPE = tf.float32
 learning_rate = 0.3
-epoch = 1000
+epoch = 30
 cubic_shape = [[6, 20, 20], [10, 30, 30], [26, 40, 40]]
 alpha1= 0.3
 alpha2 = 0.4
@@ -228,11 +228,11 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
         # take placeholder as input
         x = tf.placeholder(tf.float32, [None, cubic_shape[arch_index][0], cubic_shape[arch_index][1], cubic_shape[arch_index][2]])
         x_image = tf.reshape(x, [-1, cubic_shape[arch_index][0], cubic_shape[arch_index][1], cubic_shape[arch_index][2], 1])
-        if arch_index == 1:
+        if arch_index == 0:
             net = arch1(x_image,keep_prob)
-        elif arch_index == 2:
+        elif arch_index == 1:
             net = arch2(x_image,keep_prob)
-        elif arch_index == 3:
+        elif arch_index == 2:
             net = arch3(x_image,keep_prob)
         else:
             print("model architecture index must be 1 or 2 or 3,current is %s which is not supported"%(str(arch_index)))
@@ -260,12 +260,12 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
                     batch_files = all_filenames[t*batch_size:(t+1)*batch_size]
                     batch_data, batch_label = get_train_batch(batch_files)
                     # print("training data ...")
-                    # print(batch_data)
+                    # print(batch_data.shape)
                     # print("training label...")
-                    # print(batch_label)
+                    # print(batch_label.shape)
                     feed_dict = {x: batch_data, real_label: batch_label,keep_prob:0.8}
-                    _,summary = sess.run([train_step],feed_dict =feed_dict)
-                    train_writer.add_summary(summary, i)
+                    sess.run(train_step,feed_dict =feed_dict)
+                    #train_writer.add_summary(summary, i)
                     saver.save(sess, './arch-%d-ckpt/arch-%d'%(arch_index,arch_index), global_step=i + 1)
                     print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
 
@@ -282,7 +282,7 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
             print("training finshed..highest accuracy is %f,the iterator is %d " % (highest_acc, highest_iterator))
 
 
-arch_index = 1
+arch_index = 0
 npy_path = "H:/data/luna2016/cubic_normalization_npy/"
 test_path = "H:/data/luna2016/cubic_normalization_test/"
 train_model(arch_index,npy_path,test_path,batch_size = 32)
