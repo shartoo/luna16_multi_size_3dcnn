@@ -212,17 +212,18 @@ def arch3(inputs,_keep_prob):
         return out_fc2
 
 
-def train_model(arch_index,npy_path,test_path,batch_size = 32):
+def train_model(arch_index,npy_path,test_path,batch_size = 256):
 
         highest_acc = 0.0
         highest_iterator = 1
-        all_filenames = get_all_filename(npy_path,cubic_shape[arch_index][1])
-        print("file size is :\t",len(all_filenames))
+        initial_learning_rate = 0.9
+        all_train_filenames = get_all_filename(npy_path,cubic_shape[arch_index][1])
+        all_test_filenames = get_all_filename(test_path,cubic_shape[arch_index][1])
+        print("file size is :\t",len(all_train_filenames))
         # how many time should one epoch should loop to feed all data
-        times = int(len(all_filenames) / batch_size)
-        if (len(all_filenames) % batch_size) != 0:
+        times = int(len(all_train_filenames) / batch_size)
+        if (len(all_train_filenames) % batch_size) != 0:
             times = times + 1
-
         # keep_prob used for dropout
         keep_prob = tf.placeholder(tf.float32)
         # take placeholder as input
@@ -243,10 +244,18 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
         real_label = tf.placeholder(tf.float32, [None, 2])
         cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=net, labels=real_label))
         net_loss = tf.reduce_mean(cross_entropy)
-        train_step = tf.train.MomentumOptimizer(learning_rate, 0.9).minimize(net_loss)
+        tf.summary.scalar('net loss', net_loss)
+        global_step = tf.Variable(0, trainable=False)
+        # decayed_learning_rate = learning_rate *decay_rate^ (global_step / decay_steps)
+        learning_rate = tf.train.exponential_decay(initial_learning_rate,
+                                                   global_step=global_step,
+                                                   decay_steps=5000, decay_rate=0.95)
+        train_step = tf.train.MomentumOptimizer(learning_rate,momentum=0.9).minimize(net_loss)
+        tf.summary.scalar("learing_rate",learning_rate)
         correct_prediction = tf.equal(tf.argmax(net, 1), tf.argmax(real_label, 1))
         accruacy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-        #merged = tf.summary.merge_all()
+        tf.summary.scalar("training accuracy",accruacy)
+        merged = tf.summary.merge_all()
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -255,24 +264,25 @@ def train_model(arch_index,npy_path,test_path,batch_size = 32):
             for i in range(epoch):
                 epoch_start =time.time()
                 #  the data will be shuffled by every epoch
-                random.shuffle(all_filenames)
+                random.shuffle(all_train_filenames)
                 for t in range(times):
-                    batch_files = all_filenames[t*batch_size:(t+1)*batch_size]
+                    batch_files = all_train_filenames[t*batch_size:(t+1)*batch_size]
                     batch_data, batch_label = get_train_batch(batch_files)
                     # print("training data ...")
                     # print(batch_data.shape)
                     # print("training label...")
                     # print(batch_label.shape)
-                    feed_dict = {x: batch_data, real_label: batch_label,keep_prob:0.8}
-                    sess.run(train_step,feed_dict =feed_dict)
-                    #train_writer.add_summary(summary, i)
+                    feed_dict = {x: batch_data, real_label: batch_label,keep_prob:0.8,global_step:i*times+t}
+                    summary,_ = sess.run([merged,train_step],feed_dict =feed_dict)
+                    train_writer.add_summary(summary, i*times+t)
                     saver.save(sess, './arch-%d-ckpt/arch-%d'%(arch_index,arch_index), global_step=i + 1)
                     print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
 
                 epoch_end = time.time()
-                test_batch,test_label = get_test_batch(test_path)
-                print("test batch data:\t",test_batch)
-                print("test batch label:\t", test_label)
+                test_batch,test_label = get_test_batch(all_train_filenames)
+                print("type of test batch ,label",type(test_batch),type(test_label))
+                print("length of test batch data:",test_batch.shape)
+                print("length of  test batch label:\t", test_label.shape)
                 test_dict = {x: test_batch, real_label: test_label, keep_prob:1.0}
                 acc_test,loss = sess.run([accruacy,net_loss],feed_dict=test_dict)
                 print('accuracy  is %f' % acc_test)

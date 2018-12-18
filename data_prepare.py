@@ -254,25 +254,23 @@ def get_all_filename(path,size):
     list_fake = search(path, 'fake_size' + str(size) + "x" + str(size))
     return list_real+list_fake
 
-def get_test_batch(path):
+def get_test_batch(files):
     '''
             prepare every batch file data and label 【test】
     :param path:
     :return:
     '''
-    files = [os.path.join(path,f) for f in os.listdir(path)]
     batch_array = []
     batch_label = []
     for npy in files:
         try:
-            if len(batch_label)<32:
-                arr = np.load(npy)
-                arr = arr.transpose(2, 1, 0)  #
-                batch_array.append(arr)
-                if 'real_' in npy.split("/")[-1]:
-                    batch_label.append([0, 1])
-                elif 'fake_' in npy.split("/")[-1]:
-                    batch_label.append([1, 0])
+            arr = np.load(npy)
+            arr = arr.transpose(2, 1, 0)  #
+            batch_array.append(arr)
+            if 'real_' in npy.split("/")[-1]:
+                batch_label.append([0, 1])
+            elif 'fake_' in npy.split("/")[-1]:
+                batch_label.append([1, 0])
         except Exception as e:
             print("file not exists! %s" % npy)
             batch_array.append(batch_array[-1])  # some nodule process error leading nonexistent of the file, using the last file copy to fill
@@ -280,7 +278,7 @@ def get_test_batch(path):
 
     return np.array(batch_array), np.array(batch_label)
 
-def get_train_batch(batch_filename):
+def get_train_batch(batch_filename,tag="20x20"):
     '''
       prepare every batch file data and label 【train】
     :param batch_filename:
@@ -290,10 +288,10 @@ def get_train_batch(batch_filename):
     batch_label = []
     for npy in batch_filename:
         try:
+
             arr = np.load(npy)
             arr = arr.transpose(2,1,0)   #
             batch_array.append(arr)
-
             if 'real_' in  npy.split("/")[-1]:
                 batch_label.append([0,1])
             elif 'fake_' in npy.split("/")[-1]:
