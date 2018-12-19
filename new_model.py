@@ -265,6 +265,7 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
                 epoch_start =time.time()
                 #  the data will be shuffled by every epoch
                 random.shuffle(all_train_filenames)
+                random.shuffle(all_test_filenames)
                 for t in range(times):
                     batch_files = all_train_filenames[t*batch_size:(t+1)*batch_size]
                     batch_data, batch_label = get_train_batch(batch_files)
@@ -277,9 +278,8 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
                     train_writer.add_summary(summary, i*times+t)
                     saver.save(sess, './arch-%d-ckpt/arch-%d'%(arch_index,arch_index), global_step=i + 1)
                     print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
-
                 epoch_end = time.time()
-                test_batch,test_label = get_test_batch(all_train_filenames)
+                test_batch,test_label = get_test_batch(all_test_filenames[1000])
                 print("type of test batch ,label",type(test_batch),type(test_label))
                 print("length of test batch data:",test_batch.shape)
                 print("length of  test batch label:\t", test_label.shape)
@@ -288,11 +288,9 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
                 print('accuracy  is %f' % acc_test)
                 print("loss is ", loss)
                 print(" epoch %d time consumed %f seconds"%(i,(epoch_end-epoch_start)))
-
             print("training finshed..highest accuracy is %f,the iterator is %d " % (highest_acc, highest_iterator))
-
 
 arch_index = 0
 npy_path = "H:/data/luna2016/cubic_normalization_npy/"
 test_path = "H:/data/luna2016/cubic_normalization_test/"
-train_model(arch_index,npy_path,test_path,batch_size = 32)
+train_model(arch_index,npy_path,test_path,batch_size = 256)
