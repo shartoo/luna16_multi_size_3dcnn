@@ -86,7 +86,7 @@ def arch1(inputs,_keep_prob):
         w_fc2 = weight_variable([150,2],name="w_fc2")
         out_fc2 = tf.nn.relu(tf.add(tf.matmul(out_fc1,w_fc2), bias_variable([2], name="fc2_biases")))
         out_fc2 = tf.nn.dropout(out_fc2, keep_prob=_keep_prob)
-        return out_fc2
+        return  out_fc2
 
 def arch2(inputs,_keep_prob):
     '''
@@ -209,6 +209,7 @@ def arch3(inputs,_keep_prob):
         w_fc2 = weight_variable([250,2],name="w_fc2")
         out_fc2 = tf.nn.relu(tf.add(tf.matmul(out_fc1,w_fc2), bias_variable([2], name="fc2_biases")))
         out_fc2 = tf.nn.dropout(out_fc2, keep_prob=_keep_prob)
+
         return out_fc2
 
 
@@ -217,8 +218,26 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
         highest_acc = 0.0
         highest_iterator = 1
         initial_learning_rate = 0.9
+
         all_train_filenames = get_all_filename(npy_path,cubic_shape[arch_index][1])
+        # ensure that number of real nodule sample and fake nodule are equal
+        real_file_list = []
+        fake_file_list = []
+        real_num = 0
+        for file in all_train_filenames:
+            if "real" in file:
+                real_num = real_num +1
+                real_file_list.append(file)
+            elif "fake" in file:
+                fake_file_list.append(file)
+        print("size of real file ",len(real_file_list))
+        print("size of fake file ", len(fake_file_list))
+        fake_file_list = random.sample(fake_file_list,real_num)
+        print("size of fake file(after random choice) ", len(fake_file_list))
+        all_train_filenames = real_file_list + fake_file_list
+
         all_test_filenames = get_all_filename(test_path,cubic_shape[arch_index][1])
+        all_train_filenames = all_train_filenames[:20000]
         print("file size is :\t",len(all_train_filenames))
         # how many time should one epoch should loop to feed all data
         times = int(len(all_train_filenames) / batch_size)
@@ -236,13 +255,14 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
         elif arch_index == 2:
             net = arch3(x_image,keep_prob)
         else:
-            print("model architecture index must be 1 or 2 or 3,current is %s which is not supported"%(str(arch_index)))
+            print("model architecture index must be 0 or 1 or 2,current is %s which is not supported"%(str(arch_index)))
             return
 
         saver = tf.train.Saver()  # default to save all variable,save mode or restore from path
         # softmax layer
         real_label = tf.placeholder(tf.float32, [None, 2])
-        cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=net, labels=real_label))
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=net, labels=real_label)
+        #cross_entropy = tf.reduce_mean(-tf.reduce_sum(real_label * tf.log(net), axis=1))
         net_loss = tf.reduce_mean(cross_entropy)
         tf.summary.scalar('net loss', net_loss)
         global_step = tf.Variable(0, trainable=False)
@@ -266,6 +286,7 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
                 #  the data will be shuffled by every epoch
                 random.shuffle(all_train_filenames)
                 random.shuffle(all_test_filenames)
+                all_test_filenames = all_test_filenames[:1000]
                 for t in range(times):
                     batch_files = all_train_filenames[t*batch_size:(t+1)*batch_size]
                     batch_data, batch_label = get_train_batch(batch_files)
@@ -277,14 +298,17 @@ def train_model(arch_index,npy_path,test_path,batch_size = 256):
                     summary,_ = sess.run([merged,train_step],feed_dict =feed_dict)
                     train_writer.add_summary(summary, i*times+t)
                     saver.save(sess, './arch-%d-ckpt/arch-%d'%(arch_index,arch_index), global_step=i + 1)
-                    print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
+                    #print("training in epoch:%d of %d,times %d in %d "%(i,epoch,t,times))
                 epoch_end = time.time()
-                test_batch,test_label = get_test_batch(all_test_filenames[1000])
+
+                test_batch,test_label = get_test_batch(all_test_filenames[0:1000])
                 print("type of test batch ,label",type(test_batch),type(test_label))
                 print("length of test batch data:",test_batch.shape)
                 print("length of  test batch label:\t", test_label.shape)
                 test_dict = {x: test_batch, real_label: test_label, keep_prob:1.0}
                 acc_test,loss = sess.run([accruacy,net_loss],feed_dict=test_dict)
+                if acc_test>highest_acc:
+                    highest_acc = acc_test
                 print('accuracy  is %f' % acc_test)
                 print("loss is ", loss)
                 print(" epoch %d time consumed %f seconds"%(i,(epoch_end-epoch_start)))

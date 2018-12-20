@@ -288,7 +288,6 @@ def get_train_batch(batch_filename,tag="20x20"):
     batch_label = []
     for npy in batch_filename:
         try:
-
             arr = np.load(npy)
             arr = arr.transpose(2,1,0)   #
             batch_array.append(arr)
