@@ -1,3 +1,7 @@
+## Attention
+
+This repo does not work well, the loss stay constant but i cannot find the a solution .I need help and be careful when forking this repo!
+
 # luna16_multi_size_3dcnn
 An implement of paper "Multi-level Contextual 3D CNNs for False Positive Reduction in Pulmonary Nodule Detection"
 
