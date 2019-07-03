@@ -1,5 +1,7 @@
 ## Attention
 
+## DON'T STAR THIS REPO ANYMORE,IT'S A BAD IMPLEMENT
+
 
 
 # luna16_multi_size_3dcnn
