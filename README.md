@@ -7,7 +7,7 @@
 # luna16_multi_size_3dcnn
 An implement of paper "Multi-level Contextual 3D CNNs for False Positive Reduction in Pulmonary Nodule Detection"
 
-The detail about the paper can be found [luna16 3DCNN](http://shartoo.github.io/LUNA2016-3DCNN/)
+The detail about the paper can be found [luna16 3DCNN](https://shartoo.github.io/2017/02/10/LUNA2016-3DCNN/)
 
 ## 0 required
 
