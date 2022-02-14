@@ -27,7 +27,7 @@ The detail about the paper can be found [luna16 3DCNN](https://shartoo.github.io
 
 ## 1 data
 
-You can download LUNA16 dataset from [BaiduCloudDisk](链接: https://pan.baidu.com/s/1vUJtAshK51Zi5rFhqG2t7g 提取码: y929),there are laso some torrent file to download with other tools.
+You can download LUNA16 dataset from [BaiduCloudDisk](链接: https://pan.baidu.com/s/1qtfccpoMT2q8nsJ8CdAF5A 提取码: 2i95),there are laso some torrent file to download with other tools.
 
 Or you can download from official [website](https://luna16.grand-challenge.org/download/)
 
