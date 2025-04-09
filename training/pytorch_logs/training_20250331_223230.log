@@ -1,0 +1,68 @@
+2025-03-31 22:32:30,594 - c3d_training - INFO - 训练集: 23640个样本
+2025-03-31 22:32:30,594 - c3d_training - INFO - 验证集: 5910个样本
+2025-03-31 22:32:30,749 - c3d_training - INFO - 模型结构:
+C3dTiny(
+  (conv_block1): Sequential(
+    (0): Conv3d(1, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (1): BatchNorm3d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+  )
+  (conv_block2): Sequential(
+    (0): Conv3d(64, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (1): BatchNorm3d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool3d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (drop_out1): Dropout(p=0.2, inplace=False)
+  (conv_block3): Sequential(
+    (0): Conv3d(128, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (1): BatchNorm3d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Conv3d(256, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (4): BatchNorm3d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU()
+    (6): MaxPool3d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (drop_out2): Dropout(p=0.2, inplace=False)
+  (conv_block4): Sequential(
+    (0): Conv3d(256, 512, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (1): BatchNorm3d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Conv3d(512, 512, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (4): BatchNorm3d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU()
+    (6): MaxPool3d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (drop_out3): Dropout(p=0.2, inplace=False)
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (fc1): Sequential(
+    (0): Linear(in_features=8192, out_features=512, bias=True)
+    (1): ReLU()
+  )
+  (fc2): Linear(in_features=512, out_features=2, bias=True)
+)
+2025-03-31 22:33:51,563 - c3d_training - INFO - Epoch [1/15], Train Loss: 0.3146, Train Acc: 89.05%, Val Loss: 0.1623, Val Acc: 93.28%, Time: 80.81s
+2025-03-31 22:33:51,652 - c3d_training - INFO - Epoch [1]: 保存最佳模型, 验证准确率: 93.28%
+2025-03-31 22:35:12,255 - c3d_training - INFO - Epoch [2/15], Train Loss: 0.0834, Train Acc: 97.17%, Val Loss: 0.0728, Val Acc: 97.33%, Time: 80.39s
+2025-03-31 22:35:12,341 - c3d_training - INFO - Epoch [2]: 保存最佳模型, 验证准确率: 97.33%
+2025-03-31 22:36:33,755 - c3d_training - INFO - Epoch [3/15], Train Loss: 0.0504, Train Acc: 98.30%, Val Loss: 0.0383, Val Acc: 98.61%, Time: 81.20s
+2025-03-31 22:36:33,843 - c3d_training - INFO - Epoch [3]: 保存最佳模型, 验证准确率: 98.61%
+2025-03-31 22:37:55,955 - c3d_training - INFO - Epoch [4/15], Train Loss: 0.0368, Train Acc: 98.80%, Val Loss: 0.0522, Val Acc: 98.22%, Time: 81.89s
+2025-03-31 22:39:16,050 - c3d_training - INFO - Epoch [5/15], Train Loss: 0.0282, Train Acc: 99.04%, Val Loss: 0.0322, Val Acc: 98.98%, Time: 79.84s
+2025-03-31 22:39:16,142 - c3d_training - INFO - Epoch [5]: 保存最佳模型, 验证准确率: 98.98%
+2025-03-31 22:40:37,157 - c3d_training - INFO - Epoch [6/15], Train Loss: 0.0244, Train Acc: 99.13%, Val Loss: 0.0393, Val Acc: 98.83%, Time: 80.80s
+2025-03-31 22:41:59,029 - c3d_training - INFO - Epoch [7/15], Train Loss: 0.0204, Train Acc: 99.40%, Val Loss: 0.0383, Val Acc: 98.95%, Time: 81.64s
+2025-03-31 22:43:20,016 - c3d_training - INFO - Epoch [8/15], Train Loss: 0.0219, Train Acc: 99.31%, Val Loss: 0.0578, Val Acc: 98.29%, Time: 80.75s
+2025-03-31 22:44:41,369 - c3d_training - INFO - Epoch [9/15], Train Loss: 0.0171, Train Acc: 99.52%, Val Loss: 0.0342, Val Acc: 99.17%, Time: 81.13s
+2025-03-31 22:44:41,473 - c3d_training - INFO - Epoch [9]: 保存最佳模型, 验证准确率: 99.17%
+2025-03-31 22:46:02,745 - c3d_training - INFO - Epoch [10/15], Train Loss: 0.0173, Train Acc: 99.49%, Val Loss: 0.0279, Val Acc: 99.15%, Time: 81.04s
+2025-03-31 22:47:24,128 - c3d_training - INFO - Epoch [11/15], Train Loss: 0.0176, Train Acc: 99.47%, Val Loss: 0.0349, Val Acc: 99.17%, Time: 81.15s
+2025-03-31 22:48:44,717 - c3d_training - INFO - Epoch [12/15], Train Loss: 0.0140, Train Acc: 99.53%, Val Loss: 0.0362, Val Acc: 99.27%, Time: 80.36s
+2025-03-31 22:48:44,807 - c3d_training - INFO - Epoch [12]: 保存最佳模型, 验证准确率: 99.27%
+2025-03-31 22:50:07,041 - c3d_training - INFO - Epoch [13/15], Train Loss: 0.0126, Train Acc: 99.62%, Val Loss: 0.0497, Val Acc: 98.87%, Time: 82.02s
+2025-03-31 22:51:27,896 - c3d_training - INFO - Epoch [14/15], Train Loss: 0.0152, Train Acc: 99.49%, Val Loss: 0.0271, Val Acc: 99.32%, Time: 80.61s
+2025-03-31 22:51:27,987 - c3d_training - INFO - Epoch [14]: 保存最佳模型, 验证准确率: 99.32%
+2025-03-31 22:52:49,409 - c3d_training - INFO - Epoch [15/15], Train Loss: 0.0127, Train Acc: 99.58%, Val Loss: 0.0277, Val Acc: 99.15%, Time: 81.20s
+2025-03-31 22:52:49,737 - c3d_training - INFO - 训练完成，最终模型已保存
+2025-03-31 22:52:50,003 - c3d_training - INFO - 训练完成!

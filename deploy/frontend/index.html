@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT 肺结节检测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 - 处理步骤和进度 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>CT 肺结节检测</h1>
+            </div>
+            
+            <!-- 步骤导航 -->
+            <div class="steps">
+                <div class="step active" id="step-upload">
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>1. 上传数据</h3>
+                        <p>支持MHD、DICOM、NIfTI格式</p>
+                    </div>
+                </div>
+                
+                <div class="step" id="step-detect">
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>2. 检测分析</h3>
+                        <p>AI模型分析结节</p>
+                    </div>
+                </div>
+                
+                <div class="step" id="step-visualize">
+                    <div class="step-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>3. 可视化结果</h3>
+                        <p>查看CT切片与结节</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 上传区域 -->
+            <div class="upload-area" id="upload-area">
+                <h3>上传CT文件</h3>
+                <p>支持的格式: MHD, DICOM, NIfTI, 压缩包</p>
+
+                <div class="file-input-container">
+                    <input type="file" id="ct-file" accept=".mhd,.raw,.dcm,.dicom,.nii,.nii.gz,.zip">
+                    <button class="select-file-btn" id="select-file-btn">选择CT文件</button>
+                    <div id="file-info">请选择CT文件</div>
+                </div>
+
+                <div class="patient-info-input">
+                    <label for="patient-id">患者ID (可选):</label>
+                    <input type="text" id="patient-id" placeholder="输入患者ID">
+                </div>
+
+                <button class="upload-btn" id="upload-btn" disabled>上传数据</button>
+            </div>
+
+            <!-- 进度区域 -->
+            <div class="progress-area" id="progress-area" style="display: none;">
+                <h3>处理进度</h3>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+                <div class="progress-message" id="progress-message">正在准备处理...</div>
+                
+                <div class="action-buttons">
+                    <button class="btn" id="start-detection-btn">开始检测</button>
+                </div>
+            </div>
+            
+            <!-- 患者信息区域 -->
+            <div class="patient-info-area">
+                <div id="patient-info">患者ID: 未指定</div>
+            </div>
+        </aside>
+        
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- CT切片查看器 -->
+            <div class="viewer-container">
+                <div id="ct-viewer"></div>
+                <div class="viewer-controls">
+                    <button class="btn" id="reset-view-btn">
+                        <i class="fas fa-sync-alt"></i> 重置视图
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 结果区域 -->
+            <div class="results-panel">
+                <div class="results-header">
+                    <h2>检测结果</h2>
+                    <div class="summary">共 <span id="nodules-count">0</span> 个结节</div>
+                </div>
+                
+                <div class="results-layout">
+                    <!-- 结节列表 -->
+                    <div class="nodule-list-section">
+                        <h3>结节列表</h3>
+                        <div id="nodule-list">
+                            <!-- 结节列表将通过JS动态生成 -->
+                            <div class="no-nodules">未检测到结节</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 结节详情 -->
+                    <div class="nodule-detail-section">
+                        <div id="nodule-detail-area">
+                            <!-- 结节详情将通过JS动态生成 -->
+                            <div class="no-selection">请从上方选择结节</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 消息提示容器 -->
+    <div class="message-container" id="message-container"></div>
+    
+    <!-- 脚本 -->
+    <script src="js/main.js"></script>
+</body>
+</html> 

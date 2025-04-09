@@ -1,0 +1,803 @@
+/* 主要样式表 */
+
+/* 重置和全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 300px;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    text-align: center;
+    padding: 10px 0 20px;
+    border-bottom: 1px solid #34495e;
+}
+
+.logo h1 {
+    font-size: 1.4rem;
+    color: #3498db;
+}
+
+/* 步骤导航 */
+.steps {
+    margin: 20px 0;
+}
+
+.step {
+    display: flex;
+    padding: 15px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #34495e;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background-color: #3498db;
+    opacity: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.step.complete {
+    background-color: #27ae60;
+    opacity: 1;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.step-icon i {
+    font-size: 1.2rem;
+}
+
+.step-content h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* 上传区域 */
+.upload-area {
+    background-color: #34495e;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.upload-area h3 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.upload-area p {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 15px;
+}
+
+.file-input-container {
+    margin-bottom: 15px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.select-file-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.select-file-btn:hover {
+    background-color: #2980b9;
+}
+
+#file-info {
+    font-size: 0.8rem;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-top: 5px;
+    word-break: break-all;
+}
+
+.patient-info-input {
+    margin-bottom: 15px;
+}
+
+.patient-info-input label {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.patient-info-input input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #546e7a;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.upload-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #c0392b;
+}
+
+.upload-btn:disabled {
+    background-color: #7f8c8d;
+    cursor: not-allowed;
+}
+
+/* 进度区域 */
+.progress-area {
+    background-color: #34495e;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.progress-area h3 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.progress-container {
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #2ecc71;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.progress-message {
+    font-size: 0.8rem;
+    margin: 10px 0;
+    min-height: 40px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.btn:disabled {
+    background-color: #7f8c8d;
+    cursor: not-allowed;
+}
+
+/* 患者信息区域 */
+.patient-info-area {
+    margin-top: auto;
+    padding: 10px;
+    font-size: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+/* 主内容区域 */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 查看器容器 */
+.viewer-container {
+    flex: 0.7; /* 占据主区域的70% */
+    height: 100vh;
+    padding: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* CT切片查看器 */
+#ct-viewer {
+    background-color: #f5f5f5;
+    width: 100%;
+    height: 100%;
+    min-height: 500px; /* 确保有足够高度显示切片 */
+    position: relative;
+    border-radius: 5px;
+    overflow: auto; /* 允许内容溢出时滚动 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex; /* 使用flex布局 */
+    flex-direction: column; /* 垂直排列内容 */
+    justify-content: flex-start; /* 从上往下排列 */
+    align-items: center; /* 水平居中 */
+    padding: 10px; /* 增加内边距 */
+}
+
+/* 查看器控制区 */
+.viewer-controls {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    z-index: 10;
+}
+
+/* 结果区域 */
+.results-panel {
+    flex: 0.25; /* 占据主区域的25% */
+    height: 100vh;
+    padding: 20px;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.results-header h2 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.summary {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+/* 结果布局 */
+.results-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    min-height: 200px;
+}
+
+/* 结节列表区域 */
+.nodule-list-section {
+    flex: 1;
+    max-height: 300px;
+}
+
+.nodule-list-section h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+#nodule-list {
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 250px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.nodule-item {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-left: 4px solid #ccc;
+    transition: all 0.2s ease;
+}
+
+.nodule-item:hover {
+    background-color: #e9e9e9;
+    transform: translateX(2px);
+}
+
+.nodule-item.selected {
+    background-color: #e1f5fe;
+    border-left-color: #2196F3;
+}
+
+/* 结节详情区域 */
+.nodule-detail-section {
+    flex: 2;
+}
+
+#nodule-detail-area {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 15px;
+    height: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.no-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 150px;
+    color: #999;
+    font-style: italic;
+}
+
+/* 没有结节的提示 */
+.no-nodules {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+/* 预览区域 */
+.nodule-preview {
+    margin-top: 20px;
+}
+
+.nodule-preview h4 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* 预览视图样式 */
+.preview-views {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.preview-view {
+    width: 31%;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.preview-view h5 {
+    margin: 0;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #eaeaea;
+    text-align: center;
+}
+
+.preview-img {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-img img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border: none;
+}
+
+/* 加载中状态显示 */
+.loading-spinner.small {
+    padding: 10px;
+}
+
+.loading-spinner.small .spinner {
+    width: 25px;
+    height: 25px;
+    border-width: 3px;
+}
+
+.loading-spinner.small p {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* 错误消息样式 */
+.error-message.small {
+    font-size: 12px;
+    padding: 10px;
+    margin: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .preview-view {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* 消息提示 */
+.message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 1000;
+}
+
+.message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+.message.info {
+    background-color: #3498db;
+    color: white;
+}
+
+.message.success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.message.warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.message.error {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.message.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 300px;
+    }
+    
+    .main-content {
+        height: calc(100vh - 300px);
+    }
+    
+    .ct-viewer-container {
+        height: 40%;
+    }
+}
+
+/* 结节项样式 */
+.nodule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.nodule-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.nodule-probability {
+    padding: 3px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.nodule-probability.high {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.nodule-probability.medium {
+    background-color: #fff8e1;
+    color: #ff8f00;
+}
+
+.nodule-probability.low {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.nodule-details {
+    font-size: 12px;
+    color: #666;
+}
+
+.nodule-detail {
+    margin-bottom: 4px;
+}
+
+.detail-label {
+    color: #777;
+    margin-right: 5px;
+}
+
+/* 详细信息项样式 */
+.detail-item {
+    margin-bottom: 8px;
+    display: flex;
+}
+
+.detail-label {
+    width: 90px;
+    color: #666;
+}
+
+.detail-value {
+    flex: 1;
+    font-weight: 500;
+}
+
+.detail-value.high {
+    color: #d32f2f;
+}
+
+.detail-value.medium {
+    color: #ff8f00;
+}
+
+.detail-value.low {
+    color: #388e3c;
+}
+
+/* 加载状态 */
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #2196F3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    color: #d32f2f;
+    padding: 15px;
+    text-align: center;
+    background-color: #ffebee;
+    border-radius: 4px;
+}
+
+/* CT切片视图样式 */
+.slice-views-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    min-height: 450px; /* 确保有足够高度显示切片 */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.slice-view-container {
+    width: calc(33.33% - 10px);
+    height: 450px; /* 固定高度 */
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+}
+
+.slice-view-header {
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+
+.slice-view {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #000;
+    position: relative;
+    min-height: 350px; /* 确保切片视图区域有足够高度 */
+}
+
+.slice-view img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    border: 1px solid #444; /* 添加边框以便更容易看到图像边界 */
+}
+
+.slice-view-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background-color: #333;
+}
+
+.slice-btn {
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.slice-btn:hover {
+    background-color: #666;
+}
+
+.slice-btn:active {
+    background-color: #555;
+}
+
+.slice-index {
+    color: white;
+    margin: 0 15px;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .slice-view-container {
+        width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .slice-view-container {
+        width: 100%;
+    }
+} 
